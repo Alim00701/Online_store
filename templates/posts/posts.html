@@ -1,0 +1,27 @@
+{% extends 'layouts/index.html' %}
+
+{% block content %}
+    <style type="text/css">
+        .posts {
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+            margin-left: 10%;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+    </style>
+    <div class="posts">
+        {% for post in posts %}
+            <div>
+                <div class="card" style="width: 18rem;">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ post.title }}</h5>
+                    <h6 class="card-subtitle">{{ post.created_date }} </h6>
+                    <a href="#" class="card-link">Another link</a>
+                  </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
