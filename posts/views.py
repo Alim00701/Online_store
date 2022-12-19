@@ -24,3 +24,15 @@ def data(request):
 
 def good_by(request):
     return HttpResponse('Good by user!!!')
+
+
+def product_detail_view(request, id):
+    if request.method == 'GET':
+        post = Product.objects.get(id=id)
+
+        context = {
+            'post': post,
+            'reviews': post.reviews.all()
+        }
+
+        return render(request, 'posts/review.html', context=context)
