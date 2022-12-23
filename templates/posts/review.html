@@ -25,10 +25,25 @@
             color: #242b2e;
             background: #cbcbcb;
         }
+        .post img {
+            width: 50%;
+        }
     </style>
     <div class="post">
+        {% if post.image %}
+            <img src="/media/{{ post.image }}/" alt="img not found :(">
+        {% else %}
+            <img src="/media/default-thumbnail.jpg" alt="">
+        {% endif %}
         <h1>{{ post.title }}</h1>
         <h5>{{ post.description }}</h5>
+        <div class="categories">
+            {% for category in categories %}
+                <div class="category">
+                    <h6>{{ category.title }}</h6>
+                </div>
+            {% endfor %}
+        </div>
         <div class="dates">
             <h5>{{ post.created_date }}</h5>
             <h5>{{ post.modified_date }}</h5>

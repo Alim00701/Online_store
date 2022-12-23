@@ -10,12 +10,20 @@
             flex-wrap: wrap;
             padding: 20px;
         }
+        .posts img {
+            width: 100%;
+        }
     </style>
     <div class="posts">
         {% for post in posts %}
             <div>
                 <div class="card" style="width: 18rem;">
                   <div class="card-body">
+                    {% if post.image %}
+                        <img src="/media/{{ post.image }}/" alt="img not found :(">
+                    {% else %}
+                        <img src="/media/default-thumbnail.jpg" alt="">
+                    {% endif %}
                     <h5 class="card-title">{{ post.title }}</h5>
                     <h6 class="card-subtitle">{{ post.created_date }} </h6>
                     <a href="/posts/{{ post.id }}/" class="card-link">Подробнее</a>
