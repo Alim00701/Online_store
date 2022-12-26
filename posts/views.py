@@ -1,5 +1,8 @@
 import datetime
-from django.shortcuts import render, HttpResponse
+
+from django.shortcuts import render, HttpResponse, redirect
+
+from posts.forms import ProductCreateForm, CommentCreateForm
 from posts.models import Product, Category, Review
 
 
@@ -46,12 +49,54 @@ def posts_view(request):
 
 def product_detail_view(request, id):
     if request.method == 'GET':
-        post = Product.objects.get(id=id)
+        posts = Product.objects.get(id=id)
 
         context = {
-            'post': post,
-            'reviews': Review.objects.filter(posts=post),
-            'categories': post.caregories.all()
+            'posts': posts,
+            'reviews': posts.reviews.all(),
+            'categories': posts.caregories.all(),
+            'comment_form': CommentCreateForm
         }
 
         return render(request, 'posts/review.html', context=context)
+
+    if request.method == 'POST':
+        post = Product.objects.get(id=id)
+        form = CommentCreateForm(date=request.POST)
+
+        if form.is_valid():
+            Review.objects.create(
+                post_id=id,
+                text=form.cleaned_data.get('text')
+            )
+            return redirect(f'/posts/{id}/')
+        else:
+            return render(request, 'posts/review.html', context={
+                'post': post,
+                'reviews': post.reviews.all(),
+                'categories': post.caregories.all(),
+                'comment_form': form
+            })
+
+
+def product_create_view(request):
+    if request.method == 'GET':
+        return render(request, 'posts/create.html', context={
+            'form': ProductCreateForm
+        })
+
+    if request.method == 'POST':
+        form = ProductCreateForm(data=request.POST)
+
+        if form.is_valid():
+            Product.objects.create(
+                title=form.cleaned_data.get('title'),
+                description=form.cleaned_data.get('description'),
+                rate=form.cleaned_data.get('rate', 0)
+            )
+
+            return redirect('/posts/')
+        else:
+            return render(request, 'posts/create.html', context={
+                'form': form
+            })

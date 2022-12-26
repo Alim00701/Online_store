@@ -48,6 +48,10 @@
             <h5>{{ post.created_date }}</h5>
             <h5>{{ post.modified_date }}</h5>
         </div>
+        <form action="/posts/{{ post.id }}/" method="post"></form>
+            {% csrf_token %}
+            {{ comment_form }}
+            <input type="submit" class="btn">
         <div class="reviews">
             {% for review in reviews %}
                 <div class="review_block">
