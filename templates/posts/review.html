@@ -35,7 +35,10 @@
         {% else %}
             <img src="/media/default-thumbnail.jpg" alt="">
         {% endif %}
-        <h1>{{ post.title }}</h1>
+        <div style="display: flex; justify-content: space-between;">
+            <h1>{{ post.title }}</h1>
+            <h1>{{ post.author.username }}</h1>
+        </div>
         <h5>{{ post.description }}</h5>
         <div class="categories">
             {% for category in categories %}
@@ -55,6 +58,7 @@
         <div class="reviews">
             {% for review in reviews %}
                 <div class="review_block">
+                    <h3>{{ review.author.username }}</h3>
                     <h6>{{ review.text }}</h6>
                     <p>{{ review.created_date }}</p>
                 </div>

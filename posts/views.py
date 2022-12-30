@@ -27,7 +27,8 @@ def categories_view(request):
         categories = Category.objects.all()
 
         context = {
-            'categories': categories
+            'categories': categories,
+            'user': None if request.user.is_anonymous else request.user
         }
 
         return render(request, 'categories/index.html', context=context)
@@ -43,7 +44,8 @@ def posts_view(request):
             products = Product.objects.all()
 
         return render(request, 'posts/posts.html', context={
-            'products': products
+            'products': products,
+            'user': None if request.user.is_anonymous else request.user
         })
 
 
@@ -55,7 +57,8 @@ def product_detail_view(request, id):
             'posts': posts,
             'reviews': posts.reviews.all(),
             'categories': posts.caregories.all(),
-            'comment_form': CommentCreateForm
+            'comment_form': CommentCreateForm,
+            'user': None if request.user.is_anonymous else request.user
         }
 
         return render(request, 'posts/review.html', context=context)
@@ -66,6 +69,7 @@ def product_detail_view(request, id):
 
         if form.is_valid():
             Review.objects.create(
+                author=request.user,
                 post_id=id,
                 text=form.cleaned_data.get('text')
             )
@@ -75,7 +79,8 @@ def product_detail_view(request, id):
                 'post': post,
                 'reviews': post.reviews.all(),
                 'categories': post.caregories.all(),
-                'comment_form': form
+                'comment_form': form,
+                'user': None if request.user.is_anonymous else request.user
             })
 
 
@@ -90,6 +95,7 @@ def product_create_view(request):
 
         if form.is_valid():
             Product.objects.create(
+                auth=request.user,
                 title=form.cleaned_data.get('title'),
                 description=form.cleaned_data.get('description'),
                 rate=form.cleaned_data.get('rate', 0)
@@ -98,5 +104,6 @@ def product_create_view(request):
             return redirect('/posts/')
         else:
             return render(request, 'posts/create.html', context={
-                'form': form
+                'form': form,
+                'user': None if request.user.is_anonymous else request.user
             })
