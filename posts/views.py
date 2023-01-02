@@ -1,9 +1,10 @@
 import datetime
-
 from django.shortcuts import render, HttpResponse, redirect
-
 from posts.forms import ProductCreateForm, CommentCreateForm
 from posts.models import Product, Category, Review
+
+
+PAGINATION_LIMIT = 6
 
 
 def main(request):
@@ -36,16 +37,30 @@ def categories_view(request):
 
 def posts_view(request):
     if request.method == 'GET':
-        category_id = request.GET.get('category_id', 0)
+        category_id = int(request.GET.get('category_id', 0))
+        search = request.GET.get('search')
+        page = int(request.GET.get('page', 1))
 
         if category_id:
             products = Product.objects.filter(categories__in=[category_id])
         else:
             products = Product.objects.all()
 
+        max_page = products.__len__() / PAGINATION_LIMIT
+
+        if round(max_page) < max_page:
+            max_page = round(max_page) + 1
+
+        max_page = int(max_page)
+        products = products[PAGINATION_LIMIT * (page-1):PAGINATION_LIMIT * page]
+
+        if search:
+            products = products.filter(title__iscontains=search)
+
         return render(request, 'posts/posts.html', context={
             'products': products,
-            'user': None if request.user.is_anonymous else request.user
+            'user': None if request.user.is_anonymous else request.user,
+            'max_page': range(1, max_page+1)
         })
 
 

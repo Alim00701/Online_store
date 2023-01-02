@@ -14,6 +14,12 @@
             width: 100%;
         }
     </style>
+    <div class="search">
+        <form action="/posts/" method="get">
+            <input type="text" name="search">
+            <input type="submit" value="search">
+        </form>
+    </div>
     <div class="posts">
         {% for post in posts %}
             <div>
@@ -30,6 +36,11 @@
                   </div>
                 </div>
             </div>
+        {% endfor %}
+    </div>
+    <div class="pages">
+        {% for page in max_page %}
+            <a href="/posts/?page={{ page }}"><button>{{ page }}</button></a>
         {% endfor %}
     </div>
 {% endblock %}
