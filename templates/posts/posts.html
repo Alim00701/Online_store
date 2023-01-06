@@ -1,19 +1,24 @@
 {% extends 'layouts/index.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'posts.css' %}">
+{% endblock %}
 
 {% block content %}
-    <style type="text/css">
-        .posts {
-            display: flex;
-            justify-content: space-between;
-            width: 80%;
-            margin-left: 10%;
-            flex-wrap: wrap;
-            padding: 20px;
-        }
-        .posts img {
-            width: 100%;
-        }
-    </style>
+{#    <style type="text/css">#}
+{#        .posts {#}
+{#            display: flex;#}
+{#            justify-content: space-between;#}
+{#            width: 80%;#}
+{#            margin-left: 10%;#}
+{#            flex-wrap: wrap;#}
+{#            padding: 20px;#}
+{#        }#}
+{#        .posts img {#}
+{#            width: 100%;#}
+{#        }#}
+{#    </style>#}
     <div class="search">
         <form action="/posts/" method="get">
             <input type="text" name="search">
